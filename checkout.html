@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - Panther Packaging</title>
+  <link rel="stylesheet" href="shop.css">
+  <link rel="stylesheet" href="checkout.css">
+  <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <h1>🐆 Panther Packaging</h1>
+          <p class="tagline">Professional Packaging Supplies</p>
+        </div>
+        <nav class="nav">
+          <a href="index.html" class="nav-link">Shop</a>
+          <a href="track.html" class="nav-link">Track Order</a>
+          <a href="cart.html" class="cart-link">
+            🛒 Cart
+            <span class="cart-badge" id="cart-count">0</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Checkout Section -->
+  <section class="checkout-section">
+    <div class="container">
+      <h2 class="page-title">Checkout</h2>
+
+      <div id="checkout-content" style="display: none;">
+        <div class="checkout-layout">
+          <!-- Checkout Form -->
+          <div class="checkout-form">
+            <form id="checkout-form">
+              
+              <!-- Contact Information -->
+              <div class="form-section">
+                <h3>Contact Information</h3>
+                <div class="form-group">
+                  <label for="customer-name">Full Name *</label>
+                  <input type="text" id="customer-name" required>
+                  <span class="error-message" id="name-error"></span>
+                </div>
+                <div class="form-group">
+                  <label for="customer-email">Email *</label>
+                  <input type="email" id="customer-email" required>
+                  <span class="error-message" id="email-error"></span>
+                </div>
+                <div class="form-group">
+                  <label for="customer-phone">Phone Number *</label>
+                  <input type="tel" id="customer-phone" placeholder="07123 456789" required>
+                  <span class="error-message" id="phone-error"></span>
+                </div>
+              </div>
+
+              <!-- Billing Address -->
+              <div class="form-section">
+                <h3>Billing Address</h3>
+                <div class="form-group">
+                  <label for="billing-address">Address Line 1 *</label>
+                  <input type="text" id="billing-address" placeholder="Street address" required>
+                </div>
+                <div class="form-group">
+                  <label for="billing-address-2">Address Line 2</label>
+                  <input type="text" id="billing-address-2" placeholder="Apartment, suite, etc. (optional)">
+                </div>
+                <div class="form-group">
+                  <label for="billing-city">City *</label>
+                  <input type="text" id="billing-city" placeholder="London" required>
+                </div>
+                <div class="form-group">
+                  <label for="billing-postcode">Postcode *</label>
+                  <input type="text" id="billing-postcode" placeholder="SW1A 1AA" maxlength="8" required>
+                  <span class="error-message" id="billing-postcode-error"></span>
+                </div>
+              </div>
+
+              <!-- Delivery Method -->
+              <div class="form-section">
+                <h3>Delivery Method</h3>
+                <div class="radio-group">
+                  <label class="radio-option">
+                    <input type="radio" name="delivery-method" value="collection">
+                    <span class="radio-label">
+                      <strong>Collection</strong>
+                      <span class="radio-description">Pick up from our Chichester location - FREE</span>
+                    </span>
+                  </label>
+                  <label class="radio-option">
+                    <input type="radio" name="delivery-method" value="delivery" checked>
+                    <span class="radio-label">
+                      <strong>Delivery</strong>
+                      <span class="radio-description">Delivery to your address - £6.99</span>
+                    </span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Delivery Address (Hidden by default) -->
+              <div id="delivery-address-section" class="form-section" style="display: none;">
+                <h3>Delivery Address</h3>
+                <div class="form-group">
+                  <label>
+                    <input type="checkbox" id="same-as-billing">
+                    Same as billing address
+                  </label>
+                </div>
+                <div id="delivery-fields">
+                  <div class="form-group">
+                    <label for="delivery-address">Address Line 1 *</label>
+                    <input type="text" id="delivery-address" placeholder="Street address">
+                  </div>
+                  <div class="form-group">
+                    <label for="delivery-address-2">Address Line 2</label>
+                    <input type="text" id="delivery-address-2" placeholder="Apartment, suite, etc. (optional)">
+                  </div>
+                  <div class="form-group">
+                    <label for="delivery-city">City *</label>
+                    <input type="text" id="delivery-city" placeholder="London">
+                  </div>
+                  <div class="form-group">
+                    <label for="delivery-postcode">Postcode *</label>
+                    <input type="text" id="delivery-postcode" placeholder="SW1A 1AA" maxlength="8">
+                  </div>
+                </div>  <!-- Close delivery-fields -->
+              </div>  <!-- Close delivery-address-section -->
+                  
+              <!-- Payment Information -->
+                  
+              <!-- Payment Information -->
+              <div class="form-section">
+                <h3>Payment Information</h3>
+                <div class="form-group">
+                  <label>Card Details *</label>
+                  <div id="card-element" class="stripe-element">
+                    <!-- Stripe Card Element will be inserted here -->
+                  </div>
+                  <div id="card-errors" class="error-message"></div>
+                </div>
+              </div>
+
+              <!-- Order Notes -->
+              <div class="form-section">
+                <h3>Order Notes (Optional)</h3>
+                <div class="form-group">
+                  <label for="order-notes">Additional instructions</label>
+                  <textarea id="order-notes" rows="3" placeholder="Any special instructions for your order..."></textarea>
+                </div>
+              </div>
+
+              <!-- Submit Button -->
+              <button type="submit" id="submit-order" class="btn-primary btn-block">
+                <span id="button-text">Place Order</span>
+                <span id="button-spinner" class="spinner-hidden">Processing...</span>
+              </button>
+
+            </form>
+          </div>
+
+          <!-- Order Summary -->
+          <div class="order-summary">
+            <h3>Order Summary</h3>
+            <div id="order-items">
+              <!-- Items will be inserted here -->
+            </div>
+            <div class="summary-divider"></div>
+            <div class="summary-row">
+              <span>Subtotal</span>
+              <span id="summary-subtotal">£0.00</span>
+            </div>
+            <div class="summary-row" id="delivery-fee-row" style="display: none;">
+              <span>Delivery</span>
+              <span id="summary-delivery">£6.99</span>
+            </div>
+            <div class="summary-divider"></div>
+            <div class="summary-row summary-total">
+              <span>Total</span>
+              <span id="summary-total">£0.00</span>
+            </div>
+            <div class="secure-checkout">
+              <p>🔒 Secure checkout with Stripe</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty Cart Message -->
+      <div id="empty-cart" class="empty-cart" style="display: none;">
+        <div class="empty-cart-icon">🛒</div>
+        <h3>Your cart is empty</h3>
+        <p>Add some items to your cart before checking out!</p>
+        <a href="index.html" class="btn-primary">Go to Shop</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Panther Packaging</h3>
+          <p>Professional packaging supplies for all your needs</p>
+        </div>
+        <div class="footer-section">
+          <h3>Contact</h3>
+          <p>📧 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="fd98938c88948f94988ebd8d9c938995988f898f889e968f9893899c91d39e92d38896">[email&#160;protected]</a></p>
+          <p>📍 Quarry Lane Industrial Estate<br>Chichester, West Sussex, PO19 8PQ</p>
+        </div>
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <a href="index.html">Shop</a>
+          <a href="cart.html">Cart</a>
+          <a href="track.html">Track Order</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Panther Truck Rental Ltd. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="shop.js"></script>
+  <script src="checkout.js"></script>
+  <script>
+    // Force cart badge update immediately
+    if (typeof updateCartBadge === 'function') {
+      updateCartBadge();
+    }
+    // And again after a short delay to be sure
+    setTimeout(() => {
+      if (typeof updateCartBadge === 'function') {
+        updateCartBadge();
+      }
+    }, 200);
+  </script>
+</body>
+</html>

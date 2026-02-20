@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track Order - Panther Packaging</title>
+  <link rel="stylesheet" href="shop.css">
+  <link rel="stylesheet" href="track.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <h1>🐆 Panther Packaging</h1>
+          <p class="tagline">Professional Packaging Supplies</p>
+        </div>
+        <nav class="nav">
+          <a href="index.html" class="nav-link">Shop</a>
+          <a href="track.html" class="nav-link active">Track Order</a>
+          <a href="cart.html" class="cart-link">
+            🛒 Cart
+            <span class="cart-badge" id="cart-count">0</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Track Order Section -->
+  <section class="track-section">
+    <div class="container">
+      <div class="track-container">
+        
+        <!-- Search Form -->
+        <div class="track-search">
+          <h2>Track Your Order</h2>
+          <p>Enter your order number to view the status of your order</p>
+          
+          <div class="search-form">
+            <input 
+              type="text" 
+              id="order-number-input" 
+              placeholder="e.g., PKG-20250116-0001"
+              autocomplete="off"
+            >
+            <button id="track-button" class="btn-primary">Track Order</button>
+          </div>
+          
+          <p class="help-text">
+            💡 Your order number was sent to your email after purchase
+          </p>
+
+          <div id="search-error" class="error-message"></div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading-state" class="loading-state" style="display: none;">
+          <div class="spinner"></div>
+          <p>Looking up your order...</p>
+        </div>
+
+        <!-- Order Not Found -->
+        <div id="order-not-found" class="order-not-found" style="display: none;">
+          <div class="not-found-icon">🔍</div>
+          <h3>Order Not Found</h3>
+          <p>We couldn't find an order with that number.</p>
+          <p class="help-text">Please check your order number and try again.</p>
+          <button onclick="resetSearch()" class="btn-secondary">Try Again</button>
+        </div>
+
+        <!-- Order Details -->
+        <div id="order-details" class="order-details" style="display: none;">
+          
+          <!-- Order Header -->
+          <div class="order-header">
+            <div>
+              <h3>Order <span id="detail-order-number"></span></h3>
+              <p class="order-date" id="detail-order-date"></p>
+            </div>
+            <div class="order-status-badge" id="detail-status-badge">
+              <!-- Status badge -->
+            </div>
+          </div>
+
+          <!-- Status Timeline -->
+          <div class="status-timeline" id="status-timeline">
+            <!-- Timeline will be inserted here -->
+          </div>
+
+          <!-- Order Info Grid -->
+          <div class="info-grid">
+            
+            <!-- Customer Info -->
+            <div class="info-card">
+              <h4>👤 Customer Details</h4>
+              <div class="info-content">
+                <p><strong>Name:</strong> <span id="detail-customer-name"></span></p>
+                <p><strong>Email:</strong> <span id="detail-customer-email"></span></p>
+                <p><strong>Phone:</strong> <span id="detail-customer-phone"></span></p>
+              </div>
+            </div>
+
+            <!-- Fulfillment Info -->
+            <div class="info-card" id="fulfillment-card">
+              <!-- Will be filled dynamically -->
+            </div>
+
+          </div>
+
+          <!-- Order Items -->
+          <div class="items-card">
+            <h4>📦 Order Items</h4>
+            <div class="items-list" id="detail-items-list">
+              <!-- Items will be inserted here -->
+            </div>
+            <div class="items-summary">
+              <div class="summary-row">
+                <span>Subtotal:</span>
+                <span id="detail-subtotal"></span>
+              </div>
+              <div class="summary-row">
+                <span>Delivery:</span>
+                <span id="detail-delivery-fee"></span>
+              </div>
+              <div class="summary-row total">
+                <span>Total:</span>
+                <span id="detail-total"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="order-actions">
+            <button onclick="resetSearch()" class="btn-secondary">Track Another Order</button>
+            <a href="index.html" class="btn-primary">Continue Shopping</a>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Panther Packaging</h3>
+          <p>Professional packaging supplies for all your needs</p>
+        </div>
+        <div class="footer-section">
+          <h3>Contact</h3>
+          <p>📧 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5d38332c28342f34382e1d2d3c332935382f292f283e362f3833293c31733e32732836">[email&#160;protected]</a></p>
+          <p>📍 Quarry Lane Industrial Estate<br>Chichester, West Sussex, PO19 8PQ</p>
+        </div>
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <a href="index.html">Shop</a>
+          <a href="cart.html">Cart</a>
+          <a href="track.html">Track Order</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Panther Truck Rental Ltd. All rights

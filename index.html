@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panther Packaging Shop</title>
+  <link rel="stylesheet" href="shop.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <h1>🐆 Panther Packaging</h1>
+          <p class="tagline">Professional Packaging Supplies</p>
+        </div>
+        <nav class="nav">
+          <a href="index.html" class="nav-link active">Shop</a>
+          <a href="track.html" class="nav-link">Track Order</a>
+          <a href="cart.html" class="cart-link">
+            🛒 Cart
+            <span class="cart-badge" id="cart-count">0</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <h2>Quality Packaging Supplies</h2>
+      <p>Everything you need to pack, protect, and ship your items safely</p>
+    </div>
+  </section>
+
+  <!-- Search & Filter -->
+  <section class="filters">
+    <div class="container">
+      <div class="filter-bar">
+        <div class="search-box">
+          <input type="text" id="search-input" placeholder="Search products...">
+          <button id="search-btn">🔍</button>
+        </div>
+        <div class="filter-options">
+          <label>
+            <input type="checkbox" id="filter-in-stock" checked>
+            In Stock Only
+          </label>
+          <button id="clear-filters" class="btn-secondary">Clear Filters</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Products Grid -->
+  <section class="products">
+    <div class="container">
+      <div id="products-loading" style="display:block;text-align:center;padding:40px;">
+        <p>Loading products...</p>
+      </div>
+      
+      <div id="products-container" class="products-grid">
+        <!-- Products will be inserted here by shop.js -->
+      </div>
+
+      <div id="no-products" class="no-products" style="display: none;">
+        <p>😕 No products found</p>
+        <button onclick="location.reload()" class="btn-primary">Refresh</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cart Notification Toast -->
+  <div id="cart-toast" class="cart-toast">
+    <span id="toast-message">Item added to cart!</span>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Panther Packaging</h3>
+          <p>Professional packaging supplies for all your needs</p>
+        </div>
+        <div class="footer-section">
+          <h3>Contact</h3>
+          <p>Email: info@panthertruckrental.co.uk</p>
+          <p>📍 Quarry Lane Industrial Estate<br>Chichester, West Sussex, PO19 8PQ</p>
+        </div>
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <a href="index.html">Shop</a>
+          <a href="cart.html">Cart</a>
+          <a href="track.html">Track Order</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Panther Truck Rental Ltd. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="shop.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      loadProducts();
+      updateCartBadge();
+    });
+  </script>
+</body>
+</html>

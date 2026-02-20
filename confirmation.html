@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Confirmed - Panther Packaging</title>
+  <link rel="stylesheet" href="shop.css">
+  <style>
+    .confirmation-container {
+      max-width: 600px;
+      margin: 60px auto;
+      padding: 40px;
+      text-align: center;
+    }
+    
+    .success-icon {
+      font-size: 80px;
+      margin-bottom: 20px;
+    }
+    
+    .order-number-box {
+      background: #eff6ff;
+      border: 2px dashed #3b82f6;
+      border-radius: 8px;
+      padding: 30px;
+      margin: 30px 0;
+    }
+    
+    .order-number-label {
+      font-size: 14px;
+      color: #6b7280;
+      margin-bottom: 10px;
+    }
+    
+    .order-number {
+      font-size: 32px;
+      font-weight: 700;
+      color: #3b82f6;
+      font-family: 'Courier New', monospace;
+    }
+    
+    .info-section {
+      background: #f9fafb;
+      border-radius: 8px;
+      padding: 30px;
+      margin: 30px 0;
+      text-align: left;
+    }
+    
+    .info-item {
+      display: flex;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .info-item:last-child {
+      border-bottom: none;
+    }
+    
+    .info-icon {
+      font-size: 24px;
+      margin-right: 15px;
+    }
+    
+    .info-text {
+      flex: 1;
+    }
+    
+    .info-title {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    
+    .info-description {
+      font-size: 14px;
+      color: #6b7280;
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 40px;
+    }
+    
+    .btn {
+      padding: 12px 24px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    
+    .btn-primary {
+      background: #3b82f6;
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: #2563eb;
+    }
+    
+    .btn-secondary {
+      background: white;
+      color: #3b82f6;
+      border: 2px solid #3b82f6;
+    }
+    
+    .btn-secondary:hover {
+      background: #eff6ff;
+    }
+    
+    .note {
+      margin-top: 40px;
+      padding: 20px;
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      text-align: left;
+      border-radius: 4px;
+    }
+    
+    .note strong {
+      display: block;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <h1>🐆 Panther Packaging</h1>
+          <p class="tagline">Professional Packaging Supplies</p>
+        </div>
+        <nav class="nav">
+          <a href="index.html" class="nav-link">Shop</a>
+          <a href="track.html" class="nav-link">Track Order</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Confirmation Content -->
+  <div class="confirmation-container">
+    <div class="success-icon">✅</div>
+    <h1>Order Confirmed!</h1>
+    <p>Thank you for your order. We've received your payment and will begin processing your order shortly.</p>
+
+    <div class="order-number-box">
+      <div class="order-number-label">Your Order Number</div>
+      <div class="order-number" id="order-number">Loading...</div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-item">
+        <div class="info-icon">📧</div>
+        <div class="info-text">
+          <div class="info-title">Confirmation email sent</div>
+          <div class="info-description">to your email address</div>
+        </div>
+      </div>
+      <div class="info-item">
+        <div class="info-icon">📦</div>
+        <div class="info-text">
+          <div class="info-title">Order updates</div>
+          <div class="info-description">will be sent as your order progresses</div>
+        </div>
+      </div>
+      <div class="info-item">
+        <div class="info-icon">🔍</div>
+        <div class="info-text">
+          <div class="info-title">Track your order</div>
+          <div class="info-description">anytime using your order number</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note">
+      <strong>📝 Save your order number</strong>
+      Save your order number to track your order later
+    </div>
+
+    <div class="action-buttons">
+      <a href="track.html" class="btn btn-primary">Track Order</a>
+      <a href="index.html" class="btn btn-secondary">Continue Shopping</a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Panther Packaging</h3>
+          <p>Professional packaging supplies for all your needs</p>
+        </div>
+        <div class="footer-section">
+          <h3>Contact</h3>
+          <p>📧 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="75101b04001c071c10063505141b011d1007010700161e07101b0114195b161a5b001e">[email&#160;protected]</a></p>
+          <p>📍 Quarry Lane Industrial Estate<br>Chichester, West Sussex, PO19 8PQ</p>
+        </div>
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <a href="index.html">Shop</a>
+          <a href="cart.html">Cart</a>
+          <a href="track.html">Track Order</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Panther Truck Rental Ltd. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="shop.js"></script>
+  <script>
+    // Get order number from URL
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const orderNumber = urlParams.get('order');
+      
+      const orderNumberEl = document.getElementById('order-number');
+      if (orderNumber && orderNumberEl) {
+        orderNumberEl.textContent = orderNumber;
+      } else if (orderNumberEl) {
+        orderNumberEl.textContent = 'Error: Order number not found';
+      }
+    });
+  </script>
+</body>
+</html>
