@@ -740,14 +740,14 @@
     document.getElementById('confirmation-view').style.display = 'none';
   }
 
-  // Override addToCart to refresh drawer if open
-  const _origAddToCart = addToCart;
-  function addToCart(productId, productName, price, maxStock) {
-    _origAddToCart(productId, productName, price, maxStock);
+  // Patch saveCart to refresh cart badge and drawer
+  const _origSaveCart = saveCart;
+  function saveCart(cart) {
+    localStorage.setItem('panther-cart', JSON.stringify(cart));
+    updateCartBadge();
     if (document.getElementById('cart-drawer').classList.contains('open')) {
       renderCartDrawer();
     }
-    updateCartBadge();
   }
 
   document.addEventListener('DOMContentLoaded', () => {
