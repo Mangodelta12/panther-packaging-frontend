@@ -719,16 +719,26 @@
     const cart = getCart();
     const total = getCartTotal();
 
+    const subtotal = getCartTotal();
+    const deliveryFee = deliveryMode === 'delivery' ? (subtotal >= 50 ? 0 : 6.99) : 0;
     const orderData = {
       customerName: name,
       customerEmail: email,
       customerPhone: phone,
-      deliveryMethod: deliveryMode,
-      deliveryAddress: deliveryMode === 'delivery' ? `${address}, ${postcode}` : 'Collection — Chichester PO19 8PQ',
-      deliveryDate,
-      notes,
+      fulfillmentType: deliveryMode,
       items: cart.map(i => ({ productId: i.id, name: i.name, quantity: i.quantity, price: i.price })),
-      total
+      subtotal: subtotal,
+      deliveryFee: deliveryFee,
+      total: subtotal + deliveryFee,
+      paymentStatus: 'pending',
+      deliveryAddress: deliveryMode === 'delivery' ? {
+        line1: address,
+        city: '',
+        postcode: postcode
+      } : null,
+      deliveryDate: deliveryMode === 'delivery' ? deliveryDate : null,
+      collectionDate: deliveryMode === 'collection' ? deliveryDate : null,
+      collectionTimeSlot: deliveryMode === 'collection' ? 'TBC' : null
     };
 
     try {
