@@ -90,47 +90,6 @@ function updateCartBadge() {
   }
 }
 
-// Load and display cart (for cart.html page)
-function loadCart() {
-  const cart = getCart();
-  const cartItemsContainer = document.getElementById('cart-items-list');
-  const emptyCart = document.getElementById('empty-cart');
-  const cartContent = document.getElementById('cart-content');
-  
-  if (!cartItemsContainer) return; // Not on cart page
-  
-  if (cart.length === 0) {
-    if (emptyCart) emptyCart.style.display = 'block';
-    if (cartContent) cartContent.style.display = 'none';
-    return;
-  }
-  
-  if (emptyCart) emptyCart.style.display = 'none';
-  if (cartContent) cartContent.style.display = 'block';
-  
-  // Render cart items
-  cartItemsContainer.innerHTML = cart.map(item => `
-    <div class="cart-item" data-id="${item.id}">
-      <div class="cart-item-details">
-        <h3 class="cart-item-name">${item.name}</h3>
-        <p class="cart-item-price">£${item.price.toFixed(2)} each</p>
-      </div>
-      <div class="cart-item-controls">
-        <div class="quantity-controls">
-          <button class="qty-btn" onclick="updateCartQuantity('${item.id}', ${item.quantity - 1})">−</button>
-          <input type="number" class="qty-input" value="${item.quantity}" min="1" 
-                 onchange="updateCartQuantity('${item.id}', parseInt(this.value))" ${item.maxStock ? `max="${item.maxStock}"` : ''}>
-          <button class="qty-btn" onclick="updateCartQuantity('${item.id}', ${item.quantity + 1})">+</button>
-        </div>
-        <div class="cart-item-total">£${(item.price * item.quantity).toFixed(2)}</div>
-        <button class="remove-btn" onclick="removeFromCart('${item.id}'); loadCart();">✕</button>
-      </div>
-    </div>
-  `).join('');
-  
-  // Update totals
-  updateCartTotals();
-}
 
 function updateCartTotals() {
   const cart = getCart();
