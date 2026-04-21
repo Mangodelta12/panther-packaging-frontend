@@ -90,18 +90,6 @@ function updateCartBadge() {
   }
 }
 
-
-function updateCartTotals() {
-  const cart = getCart();
-  const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  
-  const subtotalEl = document.getElementById('cart-subtotal');
-  const totalEl = document.getElementById('cart-total');
-  
-  if (subtotalEl) subtotalEl.textContent = `£${subtotal.toFixed(2)}`;
-  if (totalEl) totalEl.textContent = `£${subtotal.toFixed(2)}`;
-}
-
 // Toast Notifications
 function showToast(message, type = 'success') {
   const toast = document.getElementById('cart-toast');
