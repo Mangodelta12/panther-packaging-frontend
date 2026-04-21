@@ -211,18 +211,31 @@
     }
 
     function updateCartSummary(cart) {
-      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-      const delivery = 6.99; // Fixed delivery fee
-      const total = subtotal + delivery;
+  const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const delivery = subtotal >= 50 ? 0 : 6.99;
+  const total = subtotal + delivery;
 
-      document.getElementById('cart-subtotal').textContent = `£${subtotal.toFixed(2)}`;
-      document.getElementById('cart-delivery').textContent = `£${delivery.toFixed(2)}`;
-      document.getElementById('cart-total').textContent = `£${total.toFixed(2)}`;
-      
-      // Show delivery section
-      document.getElementById('delivery-section').style.display = 'flex';
-    }
+  document.getElementById('cart-subtotal').textContent = `£${subtotal.toFixed(2)}`;
+  document.getElementById('cart-total').textContent = `£${total.toFixed(2)}`;
 
+  const deliverySection = document.getElementById('delivery-section');
+  const deliveryEl = document.getElementById('cart-delivery');
+  const freeMsg = document.getElementById('free-delivery-msg');
+  const progressMsg = document.getElementById('delivery-progress-msg');
+  const remainingEl = document.getElementById('delivery-remaining');
+
+  if (delivery === 0) {
+    if (deliverySection) deliverySection.style.display = 'none';
+    if (freeMsg) freeMsg.style.display = 'block';
+    if (progressMsg) progressMsg.style.display = 'none';
+  } else {
+    if (deliverySection) deliverySection.style.display = 'flex';
+    if (deliveryEl) deliveryEl.textContent = `£${delivery.toFixed(2)}`;
+    if (freeMsg) freeMsg.style.display = 'none';
+    if (progressMsg) progressMsg.style.display = 'block';
+    if (remainingEl) remainingEl.textContent = `£${(50 - subtotal).toFixed(2)}`;
+  }
+}
     // Clear cart
     const clearBtn = document.getElementById('clear-cart-btn');
     if (clearBtn) {
