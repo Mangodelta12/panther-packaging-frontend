@@ -608,7 +608,27 @@
     `).join('');
 
     const total = getCartTotal();
-    totalEl.textContent = '£' + total.toFixed(2);
+    const delivery = total >= 50 ? 0 : 6.99;
+    const grandTotal = total + delivery;
+    totalEl.textContent = '£' + grandTotal.toFixed(2);
+
+    // Free delivery message
+    const existingMsg = document.getElementById('free-delivery-drawer-msg');
+    if (existingMsg) existingMsg.remove();
+    const msgDiv = document.createElement('div');
+    msgDiv.id = 'free-delivery-drawer-msg';
+    msgDiv.style.cssText = 'padding:8px 12px;margin:8px 0;border-radius:6px;font-size:13px;font-weight:600;';
+    if (delivery === 0) {
+      msgDiv.style.background = '#e8f5e9';
+      msgDiv.style.color = '#2e7d32';
+      msgDiv.textContent = '✅ You qualify for free delivery!';
+    } else {
+      msgDiv.style.background = '#e8f0f8';
+      msgDiv.style.color = '#2d5a8e';
+      msgDiv.innerHTML = '🚚 Add <strong>£' + (50 - total).toFixed(2) + '</strong> more for free delivery';
+    }
+    const footer = document.querySelector('.cart-drawer-footer');
+    if (footer) footer.insertBefore(msgDiv, footer.firstChild);
   }
 
   function drawerQty(id, qty) {
