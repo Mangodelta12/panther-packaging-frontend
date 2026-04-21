@@ -712,7 +712,7 @@
     };
 
     try {
-      const r = await fetch(BACKEND + '/api/orders', {
+      const r = await fetch(BACKEND + '/api/packaging-shop/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify(orderData)
