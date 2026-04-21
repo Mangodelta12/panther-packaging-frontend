@@ -55,13 +55,18 @@
             </div>
           </div>
 
-          <!-- Cart Summary -->
           <div class="cart-summary">
-            <h3>Order Summary</h3>
-            <div class="summary-row">
-              <span>Subtotal</span>
-              <span id="cart-subtotal">£0.00</span>
-            </div>
+  <h3>Order Summary</h3>
+  <div id="free-delivery-msg" style="display:none;background:#e8f5e9;border:1px solid #a5d6a7;border-radius:6px;padding:10px 14px;margin-bottom:12px;font-size:13px;font-weight:600;color:#2e7d32;">
+    ✅ You qualify for free delivery!
+  </div>
+  <div id="delivery-progress-msg" style="display:none;background:#e8f0f8;border:1px solid #b3cde8;border-radius:6px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:#2d5a8e;">
+    🚚 Add <strong id="delivery-remaining"></strong> more to get free delivery
+  </div>
+  <div class="summary-row">
+    <span>Subtotal</span>
+    <span id="cart-subtotal">£0.00</span>
+  </div>
             <div class="summary-row delivery-section" id="delivery-section" style="display: none;">
               <span>Delivery</span>
               <span id="cart-delivery">£6.99</span>
