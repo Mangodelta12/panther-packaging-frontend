@@ -643,28 +643,8 @@
   }
 
   function showCheckout() {
-    document.getElementById('cart-items-view').style.display = 'none';
-    document.getElementById('checkout-view').style.display = 'flex';
-
-    // Set min dates
-    const today = new Date();
-    const deliveryMin = new Date(today); deliveryMin.setDate(today.getDate() + 2);
-    const collectMin = new Date(today); collectMin.setDate(today.getDate() + 1);
-    const fmt = d => d.toISOString().split('T')[0];
-    document.getElementById('co-date').min = fmt(deliveryMin);
-    document.getElementById('co-date').value = fmt(deliveryMin);
-    document.getElementById('co-collect-date').min = fmt(collectMin);
-    document.getElementById('co-collect-date').value = fmt(collectMin);
-
-    // Render order summary
-    const cart = getCart();
-    const total = getCartTotal();
-    const summaryEl = document.getElementById('checkout-summary');
-    summaryEl.innerHTML = cart.map(i => `
-      <div class="row"><span>${i.name} x${i.quantity}</span><span>£${(i.price*i.quantity).toFixed(2)}</span></div>
-    `).join('') + `<div class="row total-row"><span>Total</span><span>£${total.toFixed(2)}</span></div>`;
+    window.open('https://packaging.panthertruckrental.co.uk/checkout.html', '_blank');
   }
-
   function showCart() {
     document.getElementById('cart-items-view').style.display = 'block';
     document.getElementById('checkout-view').style.display = 'none';
