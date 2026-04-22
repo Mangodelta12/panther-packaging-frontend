@@ -2,21 +2,14 @@
 
 const API_BASE = 'https://panther-packaging-backend-production.up.railway.app';
 
-// Safe storage wrapper (handles iframe/Safari/Firefox blocking)
-const safeStorage = {
-  get(key) { try { return localStorage.getItem(key); } catch { return null; } },
-  set(key, val) { try { localStorage.setItem(key, val); } catch {} },
-  remove(key) { try { localStorage.removeItem(key); } catch {} }
-};
-
 // Cart Management
 function getCart() {
-  const cart = safeStorage.get('panther-cart');
+  const cart = localStorage.getItem('panther-cart');
   return cart ? JSON.parse(cart) : [];
 }
 
 function saveCart(cart) {
-  safeStorage.set('panther-cart', JSON.stringify(cart));
+  localStorage.setItem('panther-cart', JSON.stringify(cart));
   updateCartBadge();
 }
 
@@ -74,7 +67,7 @@ function updateCartQuantity(productId, newQuantity) {
 }
 
 function clearCart() {
-  safeStorage.remove('panther-cart');
+  localStorage.removeItem('panther-cart');
   updateCartBadge();
 }
 
@@ -184,7 +177,7 @@ async function loadProducts() {
   const container = document.getElementById('products-container');
   const loading = document.getElementById('products-loading');
   const searchInput = document.getElementById('search-input');
-  const filterCheckbox = document.getElementById('filter-in-stock');
+  const filterSelect = document.getElementById('filter-in-stock');
   
   if (!container) return; // Not on products page
   
@@ -212,8 +205,8 @@ async function loadProducts() {
     if (searchInput) {
       searchInput.addEventListener('input', filterProducts);
     }
-    if (filterCheckbox) {
-      filterCheckbox.addEventListener('change', filterProducts);
+    if (filterSelect) {
+      filterSelect.addEventListener('change', filterProducts);
     }
     
   } catch (error) {
@@ -289,7 +282,7 @@ function getStockBadge(stock, threshold = 10) {
 // Filter products based on search and stock filter
 function filterProducts() {
   const searchInput = document.getElementById('search-input');
-  const filterCheckbox = document.getElementById('filter-in-stock');
+  const filterSelect = document.getElementById('filter-in-stock');
   
   if (!window.allProducts) return;
   
@@ -304,8 +297,8 @@ function filterProducts() {
     );
   }
   
-  // Apply stock filter (checkbox — checked = in stock only)
-  if (filterCheckbox && filterCheckbox.checked) {
+  // Apply stock filter
+  if (filterSelect && filterSelect.value === 'in-stock') {
     filtered = filtered.filter(product => product.stock > 0);
   }
   
