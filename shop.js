@@ -2,21 +2,16 @@
 
 const API_BASE = 'https://panther-packaging-backend-production.up.railway.app';
 
-// Safe storage wrapper (handles iframe/Safari/Firefox blocking)
-const safeStorage = {
-  get(key) { try { return localStorage.getItem(key); } catch { return null; } },
-  set(key, val) { try { localStorage.setItem(key, val); } catch {} },
-  remove(key) { try { localStorage.removeItem(key); } catch {} }
-};
-
 // Cart Management
 function getCart() {
-  const cart = safeStorage.get('panther-cart');
-  return cart ? JSON.parse(cart) : [];
+  try {
+    const cart = localStorage.getItem('panther-cart');
+    return cart ? JSON.parse(cart) : [];
+  } catch { return []; }
 }
 
 function saveCart(cart) {
-  safeStorage.set('panther-cart', JSON.stringify(cart));
+  try { localStorage.setItem('panther-cart', JSON.stringify(cart)); } catch {}
   updateCartBadge();
 }
 
@@ -74,7 +69,7 @@ function updateCartQuantity(productId, newQuantity) {
 }
 
 function clearCart() {
-  safeStorage.remove('panther-cart');
+  try { localStorage.removeItem('panther-cart'); } catch {}
   updateCartBadge();
 }
 
