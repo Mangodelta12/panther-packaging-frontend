@@ -196,7 +196,7 @@
       box-sizing: border-box;
       transition: border-color .2s;
     }
-    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #1273eb; }
+    .form-group input:focus, .form-group select:focus { outline: none; border-color: #1273eb; }
     .form-group .error { border-color: #ef4444; }
     .form-error { color: #ef4444; font-size: 12px; margin-top: 4px; }
     .delivery-options { display: flex; gap: 10px; margin-bottom: 14px; }
@@ -238,7 +238,7 @@
       margin-bottom: 16px;
       font-size: 13px;
     }
-    .order-summary-mini .sum-row { display: flex; justify-content: space-between; margin-bottom: 6px; }
+    .order-summary-mini .row { display: flex; justify-content: space-between; margin-bottom: 6px; }
     .order-summary-mini .total-row { font-weight: 700; border-top: 1px solid #e5e7eb; padding-top: 8px; margin-top: 4px; font-size: 14px; }
 
     /* Search & filter */
@@ -336,31 +336,25 @@
     .add-to-cart-btn:hover:not(:disabled) { background: #0f5fc4; }
     .add-to-cart-btn:disabled { background: #9ca3af; cursor: not-allowed; }
 
-    /* Toast — fixed at bottom of viewport, so it's visible no matter where user has scrolled */
+    /* Toast */
     .cart-toast {
       position: fixed;
       bottom: 20px;
       left: 50%;
-      transform: translateX(-50%) translateY(120px);
-      background: #059669;
+      transform: translateX(-50%) translateY(80px);
+      background: #1f2937;
       color: #fff;
-      padding: 14px 28px;
+      padding: 12px 24px;
       border-radius: 10px;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 600;
       z-index: 2000;
-      transition: transform .35s ease;
+      transition: transform .3s ease;
       white-space: nowrap;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      pointer-events: none;
     }
     .cart-toast.show { transform: translateX(-50%) translateY(0); }
     .cart-toast.success { background: #059669; }
     .cart-toast.warning { background: #d97706; }
-    .cart-toast.error { background: #dc2626; }
 
     /* Order confirmation */
     .order-confirmed {
@@ -370,14 +364,14 @@
     .order-confirmed .tick { font-size: 56px; margin-bottom: 16px; }
     .order-confirmed h3 { font-size: 20px; margin-bottom: 8px; color: #059669; }
     .order-confirmed p { color: #6b7280; font-size: 14px; line-height: 1.6; }
-    .order-confirmed .order-ref {
-      background: #f0fdf4;
-      border: 1px solid #bbf7d0;
-      border-radius: 8px;
-      padding: 12px;
-      margin: 16px 0;
-      font-weight: 700;
-      color: #15803d;
+    .order-confirmed .order-ref { 
+      background: #f0fdf4; 
+      border: 1px solid #bbf7d0; 
+      border-radius: 8px; 
+      padding: 12px; 
+      margin: 16px 0; 
+      font-weight: 700; 
+      color: #15803d; 
     }
     .continue-shopping-btn {
       margin-top: 16px;
@@ -443,8 +437,8 @@
     <button class="cart-close-btn" onclick="closeCart()">✕</button>
   </div>
 
-  <!-- VIEW 1: Cart items -->
-  <div id="cart-items-view" style="display:flex;flex-direction:column;flex:1;min-height:0;">
+  <!-- Cart items view -->
+  <div id="cart-items-view">
     <div class="cart-drawer-items" id="cart-drawer-items">
       <div class="cart-empty-msg" id="cart-empty-msg">Your cart is empty</div>
     </div>
@@ -459,47 +453,10 @@
     </div>
   </div>
 
-  <!-- VIEW 2: Checkout form -->
-  <div id="checkout-view" style="display:none;flex-direction:column;flex:1;min-height:0;">
-    <div class="checkout-panel active" id="checkout-panel">
-      <button class="back-to-cart" onclick="showCart()">← Back to cart</button>
-      <h3>Checkout</h3>
-
-      <div class="order-summary-mini" id="order-summary-mini"></div>
-
-      <!-- Delivery / Collection toggle -->
-      <div class="delivery-options">
-        <div class="delivery-option selected" id="opt-delivery" onclick="selectDelivery('delivery')">
-          🚚 Delivery
-          <div class="price" id="delivery-price-label">£6.99</div>
-        </div>
-        <div class="delivery-option" id="opt-collection" onclick="selectDelivery('collection')">
-          📍 Collection
-          <div class="price">Free</div>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>Full Name *</label>
-        <input type="text" id="co-name" placeholder="Jane Doe">
-        <div class="form-error" id="co-name-err"></div>
-      </div>
-      <div class="form-group">
-        <label>Email *</label>
-        <input type="email" id="co-email" placeholder="you@example.com">
-        <div class="form-error" id="co-email-err"></div>
-      </div>
-      <div class="form-group">
-        <label>Phone *</label>
-        <input type="tel" id="co-phone" placeholder="+44...">
-        <div class="form-error" id="co-phone-err"></div>
-      </div>
-
-      <!-- Delivery-only fields -->
       <div id="delivery-fields">
         <div class="form-group">
           <label>Delivery Address *</label>
-          <textarea id="co-address" placeholder="House number, street, town..." rows="3"></textarea>
+          <textarea id="co-address" placeholder="House number, street, town..." rows="3" style="width:100%;padding:10px 12px;border:1px solid #e5e7eb;border-radius:8px;font-size:14px;font-family:inherit;resize:vertical;box-sizing:border-box;"></textarea>
           <div class="form-error" id="co-address-err"></div>
         </div>
         <div class="form-group">
@@ -514,7 +471,6 @@
         </div>
       </div>
 
-      <!-- Collection-only fields -->
       <div id="collection-fields" style="display:none;">
         <div class="form-group">
           <label>Preferred Collection Date *</label>
@@ -528,110 +484,52 @@
 
       <div class="form-group">
         <label>Notes (optional)</label>
-        <textarea id="co-notes" placeholder="Any special instructions..." rows="2"></textarea>
+        <textarea id="co-notes" placeholder="Any special instructions..." rows="2" style="width:100%;padding:10px 12px;border:1px solid #e5e7eb;border-radius:8px;font-size:14px;font-family:inherit;resize:vertical;box-sizing:border-box;"></textarea>
       </div>
 
       <button class="cart-checkout-btn" onclick="submitOrder()" id="submit-order-btn">
         Place Order →
       </button>
     </div>
-  </div>
 
-  <!-- VIEW 3: Confirmation -->
-  <div id="confirmation-view" style="display:none;padding:20px;flex:1;overflow-y:auto;">
-    <div class="order-confirmed">
-      <div class="tick">✅</div>
-      <h3>Order Confirmed!</h3>
-      <div class="order-ref" id="order-ref-display"></div>
-      <p>We'll be in touch shortly to confirm your order details.</p>
-      <p style="margin-top:8px;">A confirmation will be sent to your email address.</p>
-      <button class="continue-shopping-btn" onclick="continueShopping()">Continue Shopping</button>
+    <!-- Confirmation view -->
+    <div id="confirmation-view" style="display:none;padding:20px;">
+      <div class="order-confirmed">
+        <div class="tick">✅</div>
+        <h3>Order Confirmed!</h3>
+        <div class="order-ref" id="order-ref-display"></div>
+        <p>We'll be in touch shortly to confirm your order details.</p>
+        <p style="margin-top:8px;">A confirmation will be sent to your email address.</p>
+        <button class="continue-shopping-btn" onclick="continueShopping()">Continue Shopping</button>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- Toast (bottom of page — visible wherever user has scrolled to) -->
-<div id="cart-toast" class="cart-toast success">
+<!-- Toast -->
+<div id="cart-toast" class="cart-toast">
   <span id="toast-message">Item added to cart!</span>
 </div>
 
 <script src="shop.js"></script>
 <script>
   const BACKEND = 'https://panther-packaging-backend-production.up.railway.app';
-  const FREE_DELIVERY_THRESHOLD = 50;
-  const DELIVERY_FEE = 6.99;
   let deliveryMode = 'delivery';
 
-  // ---------- TOAST ----------
-  // Define showToast on window IF shop.js didn't already provide one.
-  // We DON'T overwrite a working one — we just make sure there's a working showToast available.
-  if (typeof window.showToast !== 'function') {
-    window.showToast = function(message, type) {
-      const toast = document.getElementById('cart-toast');
-      const msg = document.getElementById('toast-message');
-      if (!toast || !msg) return;
-      msg.textContent = message || 'Item added to cart!';
-      toast.classList.remove('success', 'warning', 'error');
-      toast.classList.add(type || 'success');
-      toast.classList.add('show');
-      clearTimeout(window._toastTimeout);
-      window._toastTimeout = setTimeout(() => toast.classList.remove('show'), 2500);
-    };
-  }
-
-  // ---------- CART BADGE ----------
-  // Wrap the original (if any) so ours runs AFTER it, rather than replacing it.
-  const _origUpdateCartBadge = (typeof window.updateCartBadge === 'function') ? window.updateCartBadge : null;
-  window.updateCartBadge = function() {
-    if (_origUpdateCartBadge) {
-      try { _origUpdateCartBadge(); } catch (e) {}
-    }
+  // Override updateCartBadge to also update our embed badge
+  const _origUpdateCartBadge = updateCartBadge;
+  function updateCartBadge() {
     const badge = document.getElementById('cart-count');
-    if (badge && typeof getCartItemCount === 'function') {
+    if (badge) {
       const count = getCartItemCount();
       badge.textContent = count;
       badge.classList.toggle('visible', count > 0);
     }
-  };
+  }
 
-  // ---------- SAVE CART WRAPPER (the key trick for toast) ----------
-  // Every time the cart is saved, compare the new item count to the previous count.
-  // If it grew, fire the toast. This works no matter how shop.js triggers "add to cart".
-  const _origSaveCart = (typeof window.saveCart === 'function') ? window.saveCart : null;
-  let _previousCartCount = (typeof getCartItemCount === 'function') ? getCartItemCount() : 0;
-
-  window.saveCart = function(cart) {
-    // Call the original save if available, otherwise fall back to localStorage
-    if (_origSaveCart) {
-      try { _origSaveCart(cart); }
-      catch (e) { localStorage.setItem('panther-cart', JSON.stringify(cart)); }
-    } else {
-      localStorage.setItem('panther-cart', JSON.stringify(cart));
-    }
-
-    // Refresh UI
-    window.updateCartBadge();
-    if (document.getElementById('cart-drawer').classList.contains('open')) {
-      renderCartDrawer();
-    }
-
-    // Fire toast if cart grew
-    const newCount = (typeof getCartItemCount === 'function')
-      ? getCartItemCount()
-      : (Array.isArray(cart) ? cart.reduce((s, i) => s + (i.quantity || 0), 0) : 0);
-
-    if (newCount > _previousCartCount) {
-      const diff = newCount - _previousCartCount;
-      window.showToast(diff === 1 ? '✓ Added to cart' : `✓ ${diff} items added to cart`, 'success');
-    }
-    _previousCartCount = newCount;
-  };
-
-  // ---------- CART DRAWER ----------
   function openCart() {
     document.getElementById('cart-drawer').classList.add('open');
     document.getElementById('cart-overlay').classList.add('open');
-    showCart();
     renderCartDrawer();
   }
 
@@ -643,15 +541,14 @@
   function renderCartDrawer() {
     const cart = getCart();
     const itemsEl = document.getElementById('cart-drawer-items');
+    const emptyEl = document.getElementById('cart-empty-msg');
     const totalEl = document.getElementById('cart-drawer-total');
     const checkoutBtn = document.getElementById('proceed-checkout-btn');
 
-    if (!cart || cart.length === 0) {
+    if (cart.length === 0) {
       itemsEl.innerHTML = '<div class="cart-empty-msg">Your cart is empty</div>';
       totalEl.textContent = '£0.00';
       checkoutBtn.disabled = true;
-      const oldMsg = document.getElementById('free-delivery-drawer-msg');
-      if (oldMsg) oldMsg.remove();
       return;
     }
 
@@ -659,7 +556,7 @@
     itemsEl.innerHTML = cart.map(item => `
       <div class="cart-drawer-item">
         <div>
-          <div class="cart-drawer-item-name">${escapeHtml(item.name)}</div>
+          <div class="cart-drawer-item-name">${item.name}</div>
           <div class="cart-drawer-item-price">£${item.price.toFixed(2)} each</div>
           <div class="cart-drawer-qty">
             <button onclick="drawerQty('${item.id}', ${item.quantity - 1})">−</button>
@@ -672,9 +569,9 @@
       </div>
     `).join('');
 
-    const subtotal = getCartTotal();
-    const delivery = subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : DELIVERY_FEE;
-    const grandTotal = subtotal + delivery;
+    const total = getCartTotal();
+    const delivery = total >= 50 ? 0 : 6.99;
+    const grandTotal = total + delivery;
     totalEl.textContent = '£' + grandTotal.toFixed(2);
 
     // Free delivery message
@@ -690,75 +587,29 @@
     } else {
       msgDiv.style.background = '#e8f0f8';
       msgDiv.style.color = '#2d5a8e';
-      msgDiv.innerHTML = '🚚 Add <strong>£' + (FREE_DELIVERY_THRESHOLD - subtotal).toFixed(2) + '</strong> more for free delivery';
+      msgDiv.innerHTML = '🚚 Add <strong>£' + (50 - total).toFixed(2) + '</strong> more for free delivery';
     }
     const footer = document.querySelector('.cart-drawer-footer');
     if (footer) footer.insertBefore(msgDiv, footer.firstChild);
   }
 
-  function escapeHtml(s) {
-    return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-  }
-
   function drawerQty(id, qty) {
     updateCartQuantity(id, qty);
-    // Resync count so the saveCart wrapper doesn't misfire the toast on qty changes
-    _previousCartCount = getCartItemCount();
     renderCartDrawer();
   }
 
   function drawerRemove(id) {
     removeFromCart(id);
-    _previousCartCount = getCartItemCount();
     renderCartDrawer();
-    window.updateCartBadge();
-  }
-
-  // ---------- VIEW SWITCHING ----------
-  function showCart() {
-    document.getElementById('cart-items-view').style.display = 'flex';
-    document.getElementById('checkout-view').style.display = 'none';
-    document.getElementById('confirmation-view').style.display = 'none';
+    updateCartBadge();
   }
 
   function showCheckout() {
-    const cart = getCart();
-    if (!cart || cart.length === 0) return;
-
-    // Persist cart so external checkout page (or a reload) can recover it
-    localStorage.setItem('panther-cart', JSON.stringify(cart));
-
-    document.getElementById('cart-items-view').style.display = 'none';
-    document.getElementById('checkout-view').style.display = 'flex';
-    document.getElementById('confirmation-view').style.display = 'none';
-    renderOrderSummaryMini();
-
-    // Set min date = today for date inputs
-    const today = new Date().toISOString().split('T')[0];
-    const dateInp = document.getElementById('co-date');
-    const collectInp = document.getElementById('co-collect-date');
-    if (dateInp) dateInp.min = today;
-    if (collectInp) collectInp.min = today;
+    window.open('https://packaging.panthertruckrental.co.uk/checkout.html', '_blank');
   }
-
-  function renderOrderSummaryMini() {
-    const cart = getCart();
-    const box = document.getElementById('order-summary-mini');
-    if (!box || !cart) return;
-
-    const subtotal = getCartTotal();
-    const delivery = deliveryMode === 'delivery'
-      ? (subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : DELIVERY_FEE)
-      : 0;
-    const total = subtotal + delivery;
-
-    let html = cart.map(i =>
-      `<div class="sum-row"><span>${escapeHtml(i.name)} × ${i.quantity}</span><span>£${(i.price * i.quantity).toFixed(2)}</span></div>`
-    ).join('');
-    html += `<div class="sum-row"><span>Subtotal</span><span>£${subtotal.toFixed(2)}</span></div>`;
-    html += `<div class="sum-row"><span>${deliveryMode === 'delivery' ? 'Delivery' : 'Collection'}</span><span>${delivery === 0 ? 'Free' : '£' + delivery.toFixed(2)}</span></div>`;
-    html += `<div class="sum-row total-row"><span>Total</span><span>£${total.toFixed(2)}</span></div>`;
-    box.innerHTML = html;
+  function showCart() {
+    document.getElementById('cart-items-view').style.display = 'block';
+    document.getElementById('checkout-view').style.display = 'none';
   }
 
   function selectDelivery(mode) {
@@ -767,25 +618,16 @@
     document.getElementById('opt-collection').classList.toggle('selected', mode === 'collection');
     document.getElementById('delivery-fields').style.display = mode === 'delivery' ? 'block' : 'none';
     document.getElementById('collection-fields').style.display = mode === 'collection' ? 'block' : 'none';
-    renderOrderSummaryMini();
   }
 
-  // ---------- SUBMIT ORDER ----------
   async function submitOrder() {
-    const errorFields = ['co-name', 'co-email', 'co-phone', 'co-address', 'co-postcode', 'co-date', 'co-collect-date'];
-    errorFields.forEach(id => {
-      const errEl = document.getElementById(id + '-err');
-      if (errEl) errEl.textContent = '';
+    // Clear errors
+    ['co-name','co-email','co-phone','co-address','co-postcode','co-date','co-collect-date'].forEach(id => {
+      const el = document.getElementById(id + '-err');
+      if (el) el.textContent = '';
       const inp = document.getElementById(id);
       if (inp) inp.classList.remove('error');
     });
-
-    const setErr = (id, msg) => {
-      const errEl = document.getElementById(id + '-err');
-      const inp = document.getElementById(id);
-      if (errEl) errEl.textContent = msg;
-      if (inp) inp.classList.add('error');
-    };
 
     const name = document.getElementById('co-name').value.trim();
     const email = document.getElementById('co-email').value.trim();
@@ -793,36 +635,34 @@
     const notes = document.getElementById('co-notes').value.trim();
 
     let valid = true;
-    if (!name) { setErr('co-name', 'Required'); valid = false; }
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setErr('co-email', 'Valid email required'); valid = false; }
-    if (!phone) { setErr('co-phone', 'Required'); valid = false; }
+    if (!name) { document.getElementById('co-name-err').textContent = 'Required'; document.getElementById('co-name').classList.add('error'); valid = false; }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { document.getElementById('co-email-err').textContent = 'Valid email required'; document.getElementById('co-email').classList.add('error'); valid = false; }
+    if (!phone) { document.getElementById('co-phone-err').textContent = 'Required'; document.getElementById('co-phone').classList.add('error'); valid = false; }
 
-    let deliveryDate = null, collectionDate = null, address = null, postcode = null;
+    let deliveryDate, address, postcode;
     if (deliveryMode === 'delivery') {
       address = document.getElementById('co-address').value.trim();
       postcode = document.getElementById('co-postcode').value.trim();
       deliveryDate = document.getElementById('co-date').value;
-      if (!address) { setErr('co-address', 'Required'); valid = false; }
-      if (!postcode) { setErr('co-postcode', 'Required'); valid = false; }
-      if (!deliveryDate) { setErr('co-date', 'Required'); valid = false; }
+      if (!address) { document.getElementById('co-address-err').textContent = 'Required'; document.getElementById('co-address').classList.add('error'); valid = false; }
+      if (!postcode) { document.getElementById('co-postcode-err').textContent = 'Required'; document.getElementById('co-postcode').classList.add('error'); valid = false; }
+      if (!deliveryDate) { document.getElementById('co-date-err').textContent = 'Required'; document.getElementById('co-date').classList.add('error'); valid = false; }
     } else {
-      collectionDate = document.getElementById('co-collect-date').value;
-      if (!collectionDate) { setErr('co-collect-date', 'Required'); valid = false; }
+      deliveryDate = document.getElementById('co-collect-date').value;
+      if (!deliveryDate) { document.getElementById('co-collect-date-err').textContent = 'Required'; document.getElementById('co-collect-date').classList.add('error'); valid = false; }
     }
 
-    if (!valid) {
-      window.showToast('Please fix the errors above', 'warning');
-      return;
-    }
+    if (!valid) return;
 
     const btn = document.getElementById('submit-order-btn');
     btn.disabled = true;
     btn.textContent = 'Placing order...';
 
     const cart = getCart();
-    const subtotal = getCartTotal();
-    const deliveryFee = deliveryMode === 'delivery' ? (subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : DELIVERY_FEE) : 0;
+    const total = getCartTotal();
 
+    const subtotal = getCartTotal();
+    const deliveryFee = deliveryMode === 'delivery' ? (subtotal >= 50 ? 0 : 6.99) : 0;
     const orderData = {
       customerName: name,
       customerEmail: email,
@@ -833,10 +673,13 @@
       deliveryFee: deliveryFee,
       total: subtotal + deliveryFee,
       paymentStatus: 'pending',
-      notes: notes || null,
-      deliveryAddress: deliveryMode === 'delivery' ? { line1: address, city: '', postcode: postcode } : null,
-      deliveryDate: deliveryDate,
-      collectionDate: collectionDate,
+      deliveryAddress: deliveryMode === 'delivery' ? {
+        line1: address,
+        city: '',
+        postcode: postcode
+      } : null,
+      deliveryDate: deliveryMode === 'delivery' ? deliveryDate : null,
+      collectionDate: deliveryMode === 'collection' ? deliveryDate : null,
       collectionTimeSlot: deliveryMode === 'collection' ? 'TBC' : null
     };
 
@@ -847,33 +690,41 @@
         body: JSON.stringify(orderData)
       });
       const data = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(data.error || ('HTTP ' + r.status));
+      if (!r.ok) throw new Error(data.error || 'Order failed');
 
       clearCart();
-      _previousCartCount = 0;
-      window.updateCartBadge();
+      updateCartBadge();
       document.getElementById('order-ref-display').textContent = 'Order ref: ' + (data.orderRef || data.id || 'Confirmed');
-      document.getElementById('checkout-view').style.display = 'none';
+      document.getElementById('checkout-panel').style.display = 'none';
       document.getElementById('confirmation-view').style.display = 'block';
     } catch (e) {
       btn.disabled = false;
       btn.textContent = 'Place Order →';
-      window.showToast('Error: ' + (e.message || 'Please try again'), 'error');
+      showToast('Error: ' + (e.message || 'Please try again'), 'warning');
     }
   }
 
   function continueShopping() {
     closeCart();
-    showCart();
+    document.getElementById('cart-items-view').style.display = 'block';
+    document.getElementById('checkout-view').style.display = 'none';
+    document.getElementById('checkout-panel').style.display = 'block';
+    document.getElementById('confirmation-view').style.display = 'none';
+  }
+
+  // Patch saveCart to refresh cart badge and drawer
+  const _origSaveCart = saveCart;
+  function saveCart(cart) {
+    localStorage.setItem('panther-cart', JSON.stringify(cart));
+    updateCartBadge();
+    if (document.getElementById('cart-drawer').classList.contains('open')) {
+      renderCartDrawer();
+    }
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    if (typeof loadProducts === 'function') loadProducts();
-    window.updateCartBadge();
-    // Init previous count AFTER page load (shop.js may hydrate cart from localStorage)
-    if (typeof getCartItemCount === 'function') {
-      _previousCartCount = getCartItemCount();
-    }
+    loadProducts();
+    updateCartBadge();
   });
 </script>
 </body>
