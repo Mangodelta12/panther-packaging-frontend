@@ -6,7 +6,7 @@
   <title>Panther Packaging Shop</title>
   <link rel="stylesheet" href="shop.css">
   <style>
-    body { background: transparent; margin: 0; padding: 0; }
+    html, body { background: transparent; margin: 0; padding: 0; }
     .header, .hero, .footer { display: none !important; }
 
     /* ── Cart bar ── */
@@ -51,14 +51,15 @@
     }
     .embed-cart-count.visible { display: flex; }
 
-    /* ── Cart drawer ── */
+    /* ── Cart drawer — fixed size popup, not full iframe height ── */
     .cart-drawer {
       position: fixed;
       top: 0;
       right: -420px;
       width: 400px;
       max-width: 95vw;
-      height: 100vh;
+      height: 700px;
+      max-height: 100%;
       background: #fff;
       box-shadow: -4px 0 24px rgba(0,0,0,0.15);
       z-index: 1000;
@@ -66,6 +67,7 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      border-radius: 0 0 0 12px;
     }
     .cart-drawer.open { right: 0; }
     .cart-overlay {
@@ -105,7 +107,7 @@
     }
     .drawer-view.hidden { display: none; }
 
-    /* ── Cart items view ── */
+    /* ── Cart items ── */
     .cart-drawer-items {
       flex: 1;
       overflow-y: auto;
@@ -204,8 +206,6 @@
     }
     .back-btn:hover { text-decoration: underline; }
     .checkout-title { font-size: 17px; font-weight: 700; margin: 0 0 16px; }
-
-    /* Pay notice */
     .pay-notice {
       background: #f0fdf4;
       border: 1px solid #86efac;
@@ -215,12 +215,7 @@
       color: #15803d;
       font-weight: 600;
       margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
-
-    /* Order summary */
     .order-summary {
       background: #f9fafb;
       border: 1px solid #e5e7eb;
@@ -231,8 +226,6 @@
     }
     .sum-row { display: flex; justify-content: space-between; margin-bottom: 6px; }
     .sum-row.total { font-weight: 700; border-top: 1px solid #e5e7eb; padding-top: 8px; margin-top: 2px; font-size: 14px; }
-
-    /* Delivery toggle */
     .delivery-options { display: flex; gap: 10px; margin-bottom: 16px; }
     .delivery-option {
       flex: 1;
@@ -250,12 +243,9 @@
     .delivery-option.selected { border-color: #1273eb; background: #eef5ff; color: #1273eb; }
     .delivery-option .opt-price { font-size: 12px; color: #6b7280; margin-top: 2px; font-weight: 400; }
     .delivery-option.selected .opt-price { color: #1273eb; }
-
-    /* Form */
     .form-group { margin-bottom: 13px; }
     .form-group label { display: block; font-weight: 600; font-size: 13px; margin-bottom: 5px; color: #374151; }
-    .form-group input,
-    .form-group textarea {
+    .form-group input, .form-group textarea {
       width: 100%;
       padding: 10px 12px;
       border: 1px solid #e5e7eb;
@@ -266,16 +256,10 @@
       transition: border-color .2s;
       resize: vertical;
     }
-    .form-group input:focus,
-    .form-group textarea:focus { outline: none; border-color: #1273eb; }
-    .form-group input.err,
-    .form-group textarea.err { border-color: #ef4444; }
+    .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #1273eb; }
+    .form-group input.err, .form-group textarea.err { border-color: #ef4444; }
     .form-err { color: #ef4444; font-size: 12px; margin-top: 3px; }
-    .collection-address {
-      font-size: 13px;
-      color: #6b7280;
-      margin: 4px 0 0;
-    }
+    .collection-address { font-size: 13px; color: #6b7280; margin: 4px 0 0; }
     .checkout-footer {
       padding: 14px 20px;
       border-top: 2px solid #e5e7eb;
@@ -283,7 +267,7 @@
       flex-shrink: 0;
     }
 
-    /* ── Confirmation view ── */
+    /* ── Confirmation ── */
     .confirmation-wrap {
       flex: 1;
       overflow-y: auto;
@@ -436,16 +420,14 @@
 
     @media(max-width:600px){
       .products-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-      .cart-drawer { width: 100%; max-width: 100%; }
+      .cart-drawer { width: 100%; max-width: 100%; height: 600px; }
     }
   </style>
 </head>
 <body>
 
-<!-- Overlay -->
 <div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
 
-<!-- Cart bar -->
 <div class="embed-cart-bar">
   <button class="embed-cart-btn" onclick="openCart()">
     🛒 Cart
@@ -453,7 +435,6 @@
   </button>
 </div>
 
-<!-- Search & filter -->
 <div class="embed-filters">
   <div class="embed-search">
     <input type="text" id="search-input" placeholder="Search products...">
@@ -465,7 +446,6 @@
   </label>
 </div>
 
-<!-- Products -->
 <div class="embed-products">
   <div id="products-loading" style="text-align:center;padding:40px;"><p>Loading products...</p></div>
   <div id="products-container" class="products-grid"></div>
@@ -496,21 +476,13 @@
     </div>
   </div>
 
-  <!-- VIEW 2: Checkout form -->
+  <!-- VIEW 2: Checkout -->
   <div class="drawer-view hidden" id="view-checkout">
     <div class="checkout-scroll">
       <button class="back-btn" onclick="showView('cart')">← Back to cart</button>
       <p class="checkout-title">Checkout</p>
-
-      <!-- Pay on delivery notice -->
-      <div class="pay-notice">
-        💳 Payment is taken on delivery or collection — no card needed now
-      </div>
-
-      <!-- Order summary -->
+      <div class="pay-notice">💳 Payment is taken on delivery or collection — no card needed now</div>
       <div class="order-summary" id="order-summary"></div>
-
-      <!-- Delivery / Collection -->
       <div class="delivery-options">
         <div class="delivery-option selected" id="opt-delivery" onclick="selectDelivery('delivery')">
           🚚 Delivery
@@ -521,8 +493,6 @@
           <div class="opt-price">Free</div>
         </div>
       </div>
-
-      <!-- Contact details -->
       <div class="form-group">
         <label>Full Name *</label>
         <input type="text" id="co-name" placeholder="Jane Doe">
@@ -538,8 +508,6 @@
         <input type="tel" id="co-phone" placeholder="+44...">
         <div class="form-err" id="co-phone-err"></div>
       </div>
-
-      <!-- Delivery fields -->
       <div id="delivery-fields">
         <div class="form-group">
           <label>Delivery Address *</label>
@@ -557,8 +525,6 @@
           <div class="form-err" id="co-date-err"></div>
         </div>
       </div>
-
-      <!-- Collection fields -->
       <div id="collection-fields" style="display:none;">
         <div class="form-group">
           <label>Preferred Collection Date *</label>
@@ -567,7 +533,6 @@
         </div>
         <p class="collection-address">📍 Quarry Lane Industrial Estate, Chichester, PO19 8PQ</p>
       </div>
-
       <div class="form-group">
         <label>Notes (optional)</label>
         <textarea id="co-notes" rows="2" placeholder="Any special instructions..."></textarea>
@@ -593,7 +558,6 @@
   </div>
 </div>
 
-<!-- Toast (fixed inside iframe viewport) -->
 <div id="cart-toast" class="cart-toast success">
   <span id="toast-message">Added to cart!</span>
 </div>
@@ -605,14 +569,12 @@
   const DELIVERY_FEE = 6.99;
   let deliveryMode = 'delivery';
 
-  // ── Safe storage (handles iframe/Safari blocking) ──
   const safeStorage = {
     get(k)    { try { return localStorage.getItem(k); }    catch { return null; } },
     set(k, v) { try { localStorage.setItem(k, v); }        catch {} },
     del(k)    { try { localStorage.removeItem(k); }        catch {} }
   };
 
-  // ── Override shop.js functions to use safeStorage ──
   window.getCart = function() {
     const c = safeStorage.get('panther-cart');
     return c ? JSON.parse(c) : [];
@@ -620,16 +582,13 @@
   window.saveCart = function(cart) {
     safeStorage.set('panther-cart', JSON.stringify(cart));
     updateCartBadge();
-    if (document.getElementById('cart-drawer').classList.contains('open')) {
-      renderCartDrawer();
-    }
+    if (document.getElementById('cart-drawer').classList.contains('open')) renderCartDrawer();
   };
   window.clearCart = function() {
     safeStorage.del('panther-cart');
     updateCartBadge();
   };
 
-  // ── Toast ──
   window.showToast = function(msg, type) {
     const toast = document.getElementById('cart-toast');
     const msgEl = document.getElementById('toast-message');
@@ -641,7 +600,6 @@
     window._toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
   };
 
-  // ── Cart badge ──
   window.updateCartBadge = function() {
     const badge = document.getElementById('cart-count');
     if (!badge) return;
@@ -650,11 +608,10 @@
     badge.classList.toggle('visible', count > 0);
   };
 
-  // ── View switching ──
   function showView(name) {
-    ['cart','checkout','confirmation'].forEach(v => {
-      document.getElementById('view-' + v).classList.toggle('hidden', v !== name);
-    });
+    ['cart','checkout','confirmation'].forEach(v =>
+      document.getElementById('view-' + v).classList.toggle('hidden', v !== name)
+    );
     const titles = { cart: '🛒 Your Cart', checkout: 'Checkout', confirmation: 'Order Confirmed' };
     document.getElementById('drawer-title').textContent = titles[name] || '';
     if (name === 'checkout') {
@@ -665,7 +622,6 @@
     }
   }
 
-  // ── Open / close ──
   function openCart() {
     document.getElementById('cart-drawer').classList.add('open');
     document.getElementById('cart-overlay').classList.add('open');
@@ -677,9 +633,8 @@
     document.getElementById('cart-overlay').classList.remove('open');
   }
 
-  // ── Render cart ──
   function renderCartDrawer() {
-    const cart = getCart();
+    const cart    = getCart();
     const itemsEl = document.getElementById('cart-drawer-items');
     const totalEl = document.getElementById('cart-drawer-total');
     const btn     = document.getElementById('proceed-checkout-btn');
@@ -714,11 +669,9 @@
     const delivery = subtotal >= FREE_DELIVERY ? 0 : DELIVERY_FEE;
     totalEl.textContent = '£' + (subtotal + delivery).toFixed(2);
 
-    if (delivery === 0) {
-      notice.innerHTML = '<div style="background:#e8f5e9;color:#2e7d32;border-radius:6px;padding:8px 12px;font-size:13px;font-weight:600;margin-bottom:10px;">✅ Free delivery unlocked!</div>';
-    } else {
-      notice.innerHTML = `<div style="background:#e8f0f8;color:#2d5a8e;border-radius:6px;padding:8px 12px;font-size:13px;font-weight:600;margin-bottom:10px;">🚚 Add <strong>£${(FREE_DELIVERY - subtotal).toFixed(2)}</strong> more for free delivery</div>`;
-    }
+    notice.innerHTML = delivery === 0
+      ? '<div style="background:#e8f5e9;color:#2e7d32;border-radius:6px;padding:8px 12px;font-size:13px;font-weight:600;margin-bottom:10px;">✅ Free delivery unlocked!</div>'
+      : `<div style="background:#e8f0f8;color:#2d5a8e;border-radius:6px;padding:8px 12px;font-size:13px;font-weight:600;margin-bottom:10px;">🚚 Add <strong>£${(FREE_DELIVERY - subtotal).toFixed(2)}</strong> more for free delivery</div>`;
   }
 
   function qtyChange(id, qty) {
@@ -732,26 +685,21 @@
     updateCartBadge();
   }
 
-  // ── Render order summary in checkout ──
   function renderOrderSummary() {
     const cart     = getCart();
     const subtotal = getCartTotal();
     const delivery = deliveryMode === 'delivery' ? (subtotal >= FREE_DELIVERY ? 0 : DELIVERY_FEE) : 0;
-    const total    = subtotal + delivery;
     const box      = document.getElementById('order-summary');
     if (!box) return;
-
     box.innerHTML =
       cart.map(i => `<div class="sum-row"><span>${esc(i.name)} × ${i.quantity}</span><span>£${(i.price * i.quantity).toFixed(2)}</span></div>`).join('') +
       `<div class="sum-row"><span>Subtotal</span><span>£${subtotal.toFixed(2)}</span></div>` +
       `<div class="sum-row"><span>${deliveryMode === 'delivery' ? 'Delivery' : 'Collection'}</span><span>${delivery === 0 ? 'Free' : '£' + delivery.toFixed(2)}</span></div>` +
-      `<div class="sum-row total"><span>Total</span><span>£${total.toFixed(2)}</span></div>`;
-
+      `<div class="sum-row total"><span>Total</span><span>£${(subtotal + delivery).toFixed(2)}</span></div>`;
     document.getElementById('delivery-price-lbl').textContent =
       subtotal >= FREE_DELIVERY ? 'Free' : '£' + DELIVERY_FEE.toFixed(2);
   }
 
-  // ── Delivery toggle ──
   function selectDelivery(mode) {
     deliveryMode = mode;
     document.getElementById('opt-delivery').classList.toggle('selected', mode === 'delivery');
@@ -761,86 +709,65 @@
     renderOrderSummary();
   }
 
-  // ── Submit order ──
   async function submitOrder() {
-    // Clear previous errors
     ['co-name','co-email','co-phone','co-address','co-postcode','co-date','co-collect-date'].forEach(id => {
-      const e = document.getElementById(id + '-err');
-      if (e) e.textContent = '';
-      const i = document.getElementById(id);
-      if (i) i.classList.remove('err');
+      const e = document.getElementById(id + '-err'); if (e) e.textContent = '';
+      const i = document.getElementById(id); if (i) i.classList.remove('err');
     });
-
     const setErr = (id, msg) => {
-      const e = document.getElementById(id + '-err');
-      const i = document.getElementById(id);
-      if (e) e.textContent = msg;
-      if (i) i.classList.add('err');
+      const e = document.getElementById(id + '-err'); if (e) e.textContent = msg;
+      const i = document.getElementById(id); if (i) i.classList.add('err');
     };
-
     const name  = document.getElementById('co-name').value.trim();
     const email = document.getElementById('co-email').value.trim();
     const phone = document.getElementById('co-phone').value.trim();
     const notes = document.getElementById('co-notes').value.trim();
-
     let valid = true;
-    if (!name)  { setErr('co-name',  'Required'); valid = false; }
+    if (!name)  { setErr('co-name', 'Required'); valid = false; }
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setErr('co-email', 'Valid email required'); valid = false; }
     if (!phone) { setErr('co-phone', 'Required'); valid = false; }
-
     let address = null, postcode = null, deliveryDate = null, collectionDate = null;
     if (deliveryMode === 'delivery') {
       address      = document.getElementById('co-address').value.trim();
       postcode     = document.getElementById('co-postcode').value.trim();
       deliveryDate = document.getElementById('co-date').value;
-      if (!address)      { setErr('co-address',  'Required'); valid = false; }
-      if (!postcode)     { setErr('co-postcode',  'Required'); valid = false; }
-      if (!deliveryDate) { setErr('co-date',      'Required'); valid = false; }
+      if (!address)      { setErr('co-address', 'Required'); valid = false; }
+      if (!postcode)     { setErr('co-postcode', 'Required'); valid = false; }
+      if (!deliveryDate) { setErr('co-date', 'Required'); valid = false; }
     } else {
       collectionDate = document.getElementById('co-collect-date').value;
       if (!collectionDate) { setErr('co-collect-date', 'Required'); valid = false; }
     }
-
     if (!valid) { showToast('Please fill in all required fields', 'warning'); return; }
 
     const btn = document.getElementById('submit-order-btn');
     btn.disabled = true;
     btn.textContent = 'Placing order...';
 
-    const cart     = getCart();
-    const subtotal = getCartTotal();
+    const cart        = getCart();
+    const subtotal    = getCartTotal();
     const deliveryFee = deliveryMode === 'delivery' ? (subtotal >= FREE_DELIVERY ? 0 : DELIVERY_FEE) : 0;
 
-    const orderData = {
-      customerName:  name,
-      customerEmail: email,
-      customerPhone: phone,
-      fulfillmentType: deliveryMode,
-      items: cart.map(i => ({ productId: i.id, name: i.name, quantity: i.quantity, price: i.price })),
-      subtotal,
-      deliveryFee,
-      total: subtotal + deliveryFee,
-      paymentStatus: 'pending',
-      notes: notes || null,
-      deliveryAddress: deliveryMode === 'delivery' ? { line1: address, city: '', postcode } : null,
-      deliveryDate,
-      collectionDate,
-      collectionTimeSlot: deliveryMode === 'collection' ? 'TBC' : null
-    };
-
     try {
-      const r    = await fetch(BACKEND + '/api/packaging-shop/orders', {
-        method:  'POST',
+      const r = await fetch(BACKEND + '/api/packaging-shop/orders', {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body:    JSON.stringify(orderData)
+        body: JSON.stringify({
+          customerName: name, customerEmail: email, customerPhone: phone,
+          fulfillmentType: deliveryMode,
+          items: cart.map(i => ({ productId: i.id, name: i.name, quantity: i.quantity, price: i.price })),
+          subtotal, deliveryFee, total: subtotal + deliveryFee,
+          paymentStatus: 'pending', notes: notes || null,
+          deliveryAddress: deliveryMode === 'delivery' ? { line1: address, city: '', postcode } : null,
+          deliveryDate, collectionDate,
+          collectionTimeSlot: deliveryMode === 'collection' ? 'TBC' : null
+        })
       });
       const data = await r.json().catch(() => ({}));
       if (!r.ok) throw new Error(data.error || 'HTTP ' + r.status);
-
       clearCart();
       updateCartBadge();
-      document.getElementById('order-ref-display').textContent =
-        'Order ref: ' + (data.orderRef || data.id || 'Confirmed');
+      document.getElementById('order-ref-display').textContent = 'Order ref: ' + (data.orderRef || data.id || 'Confirmed');
       showView('confirmation');
     } catch (e) {
       btn.disabled = false;
